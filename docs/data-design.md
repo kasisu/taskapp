@@ -24,6 +24,16 @@ erDiagram
   CARD {
     string id
     string title
+    string priority
+    string dueAt
+    string description
+    string createdAt
+  }
+  CARD ||--o{ COMMENT : has
+  COMMENT {
+    string id
+    string text
+    string createdAt
   }
 ```
 
@@ -40,22 +50,22 @@ erDiagram
       "id": "list-1",
       "title": "未着手",
       "cards": [
-        { "id": "card-1", "title": "要件を確認する" },
-        { "id": "card-2", "title": "画面を作る" }
+        { "id": "card-1", "title": "要件を確認する", "priority": "high", "dueAt": null, "description": "", "createdAt": "2026-09-22T09:00:00+09:00", "comments": [] },
+        { "id": "card-2", "title": "画面を作る", "priority": "medium", "dueAt": null, "description": "", "createdAt": "2026-09-22T09:00:00+09:00", "comments": [] }
       ]
     },
     {
       "id": "list-2",
       "title": "進行中",
       "cards": [
-        { "id": "card-3", "title": "ドラッグ&ドロップを実装する" }
+        { "id": "card-3", "title": "ドラッグ&ドロップを実装する", "priority": "low", "dueAt": null, "description": "", "createdAt": "2026-09-22T09:00:00+09:00", "comments": [] }
       ]
     },
     {
       "id": "list-3",
       "title": "完了",
       "cards": [
-        { "id": "card-4", "title": "プロトタイプを作成する" }
+        { "id": "card-4", "title": "プロトタイプを作成する", "priority": "unset", "dueAt": null, "description": "", "createdAt": "2026-09-22T09:00:00+09:00", "comments": [] }
       ]
     }
   ]
@@ -69,9 +79,18 @@ erDiagram
 | Board | lists | List[] | 表示順のリスト配列。配列の順番が表示順となる。 |
 | List | id | string | リストを識別するID。 |
 | List | title | string | 利用者が入力するリスト名。 |
+| List | sortMode | string | manual、priority、dueAt、createdAt のいずれか。選択中のカード並べ替え方法。 |
 | List | cards | Card[] | 表示順のカード配列。配列の順番が表示順となる。 |
 | Card | id | string | カードを識別するID。 |
 | Card | title | string | 利用者が入力するカード名。 |
+| Card | priority | string | unset、high、medium、low のいずれか。 |
+| Card | dueAt | string \| null | 任意の期限日時。未設定時はnull。ISO 8601形式で保存する。 |
+| Card | description | string | 任意の詳細説明。 |
+| Card | createdAt | string | カード作成日時。ISO 8601形式で保存する。 |
+| Card | comments | Comment[] | 作成日時順に表示するコメント配列。 |
+| Comment | id | string | コメントを識別するID。 |
+| Comment | text | string | 利用者が記入したコメント本文。 |
+| Comment | createdAt | string | コメントを記入した日時。ISO 8601形式で保存する。 |
 
 ## 4. 保存・復元
 
@@ -93,4 +112,7 @@ sequenceDiagram
 - 保存前に、状態をJSONへ変換できることを確認する。
 - 復元時にJSON解析または構造確認に失敗した場合は、初期状態を使用する。
 - 保存に失敗した場合は、メモリ上の表示状態を維持し、保存失敗を利用者へ通知する。
+- 既存のリストにsortModeが存在しない場合は、manualとして補完する。
+- 既存のカードに新しい項目が存在しない場合は、priorityは未設定、dueAtはnull、descriptionは空文字、commentsは空配列として補完する。
+- カードの作成日時を復元できない旧データは、保存データの読み込み日時をcreatedAtとして補完する。
 - 将来データ構造を変更する場合に備え、キー名またはデータ内にバージョンを持たせることを検討する。
