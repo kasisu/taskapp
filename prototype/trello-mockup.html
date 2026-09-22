@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>タスクボード</title><link rel="stylesheet" href="trello-mockup.css">
+</head>
+<body>
+  <header class="topbar"><a class="app-name" href="#">Taskflow</a><button class="topbar-button" type="button">ボード</button><div class="topbar-spacer"></div><button class="topbar-button" type="button" aria-label="検索">⌕</button><button class="topbar-button" type="button" aria-label="通知">♧</button><button class="avatar" type="button" aria-label="アカウント">M</button></header>
+  <main class="board">
+    <header class="board-header"><h1 id="board-title">タスクボード</h1><button class="subtle-button" type="button">非公開</button><button class="subtle-button" type="button">⌄</button><span class="header-divider"></span><button class="share-button" type="button">共有</button><button class="more-button" type="button" aria-label="ボードメニュー">•••</button></header>
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+    <section id="lists" class="lists" aria-label="タスクリスト"></section>
+  </main>
+  <dialog id="confirm-dialog"><form method="dialog"><h2>削除の確認</h2><p id="confirm-message"></p><div class="dialog-actions"><button value="cancel">取り消す</button><button class="danger" value="confirm">削除する</button></div></form></dialog>
+  <script src="trello-mockup.js"></script>
+</body>
+</html>
